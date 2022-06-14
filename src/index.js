@@ -9,14 +9,14 @@ import App from './components/App';
 import { BrowserRouter as Router } from 'react-router-dom';
 import './index.css';
 
-import { legacy_createStore } from 'redux';
-import { Provider } from 'react-redux';
+// import { legacy_createStore } from 'redux';
+// import { Provider } from 'react-redux';
 
-// const store = legacy_createStore();
+const store = createStore(reducer);
 
 ReactDOM.render(
   <Router>
-    <Provider>
+    <Provider store={store}>
       <App />
     </Provider>    
   </Router>,
