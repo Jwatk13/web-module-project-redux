@@ -3,17 +3,24 @@ import { useParams, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { deleteMovie } from '../actions/movieActions';
+import { toggleFavorites, addFavorite, removeFavorite } from '../actions/favoritesActions'
+
 
 const Movie = (props) => {
     const { id } = useParams();
     const { push } = useHistory();
 
-    const { movies } = props;
+    const { movies, displayFavorites, deleteMovie, addFavorite } = props;
     const movie = movies.find(movie=>movie.id===Number(id));
 
     const handleDelete = () => {
-        props.deleteMovie(movie.id);
+        deleteMovie(movie.id);
         //need to have this redirect below here for it to work properly..
+        push('/movies')
+    }
+
+    const handleAddFavorite = () => {
+        addFavorite(movie);
         push('/movies')
     }
     
@@ -46,7 +53,7 @@ const Movie = (props) => {
                         </section>
                         
                         <section>
-                            <span className="m-2 btn btn-dark">Favorite</span>
+                            { displayFavorites && <span onClick={handleAddFavorite} className="m-2 btn btn-dark">Favorite</span>}
                             <span className="delete" onClick={handleDelete}><input type="button" className="m-2 btn btn-danger" value="Delete"/></span>
                         </section>
                     </div>
@@ -58,8 +65,9 @@ const Movie = (props) => {
 
 const mapStateToProps = state => {
     return ({
-        movies: state.movies
+        displayFavorites: state.favorites.displayFavorites,
+        movies: state.movies.movies
     })
 }
 
-export default connect(mapStateToProps, { deleteMovie })(Movie);
+export default connect(mapStateToProps, { deleteMovie, toggleFavorites, addFavorite, removeFavorite })(Movie);
